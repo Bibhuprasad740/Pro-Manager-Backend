@@ -27,6 +27,16 @@ exports.signIn = async (req, res, next) => {
       }
     );
 
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        console.error("Token verification failed:", err.message);
+      } else {
+        console.log("Token verified successfully:", decoded);
+      }
+    });
+
+    console.log(token);
+
     return res.status(200).send({
       token,
       email: user.email,
