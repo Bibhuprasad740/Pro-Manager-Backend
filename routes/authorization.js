@@ -4,6 +4,7 @@ const checkAuthorization = (req, res, next) => {
   const tokenParam = req.headers["authorization"];
 
   if (!tokenParam) {
+    console.log(tokenParam);
     return res.status(400).send("No auth token found!");
   }
 
