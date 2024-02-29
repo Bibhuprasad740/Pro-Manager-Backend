@@ -35,6 +35,7 @@ exports.signIn = async (req, res, next) => {
       name: user.name,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+      tasks: user.tasks,
     });
   } catch (error) {
     console.log("Error in authController.signIn", error);

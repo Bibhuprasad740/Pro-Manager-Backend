@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
+const Task = require("./task");
 
 const userSchema = mongoose.Schema(
   {
@@ -15,6 +16,12 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    tasks: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Task",
+      },
+    ],
   },
   {
     timestamps: true,

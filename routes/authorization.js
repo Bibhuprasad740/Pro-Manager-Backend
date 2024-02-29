@@ -18,7 +18,7 @@ const checkAuthorization = (req, res, next) => {
         .send("Invalid authorization Token! Please sign in again!");
     }
     console.log("verified successfully!");
-
+    req.userId = user._id;
     next();
   });
 };

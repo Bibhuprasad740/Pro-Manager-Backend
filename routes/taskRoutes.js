@@ -6,6 +6,9 @@ const taskController = require("../controllers/taskController");
 // /api/addTask
 router.post("/addTask", taskController.addTask);
 
+// /api/assignTaskToUser
+router.post("/assignTaskToUser", taskController.assignTaskToUser);
+
 // /api/tasks
 router.get("/tasks", taskController.getTasks);
 

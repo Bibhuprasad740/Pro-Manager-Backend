@@ -1,7 +1,9 @@
+const { ObjectId } = require("mongodb");
 const Task = require("../database/models/task");
+const User = require("../database/models/user");
 
 exports.addTask = async (req, res) => {
-  const task = req.body;
+  let task = req.body;
   try {
     if (!task) {
       return res.status(400).send("No task found!");
@@ -18,6 +20,7 @@ exports.addTask = async (req, res) => {
       }
     }
 
+    task.userId = req.userId;
     const newTask = await new Task(task);
     await newTask.save();
 
@@ -28,9 +31,32 @@ exports.addTask = async (req, res) => {
   }
 };
 
+exports.assignTaskToUser = async (req, res) => {
+  try {
+    const { userId, taskId } = req.body;
+
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $push: { tasks: taskId } },
+      { new: true }
+    )
+      .then((response) => {
+        console.log(response);
+        return res.status(200).send("Task added to user successfully!");
+      })
+      .catch((error) => {
+        return res.status(400).send("Can not add task to user");
+      });
+  } catch (error) {
+    console.log("Error in taskController.assignTaskToUser", error);
+    return res.status(400).send("Something went wrong!");
+  }
+};
+
 exports.getTasks = async (req, res) => {
   try {
     let { status, filter } = req.query;
+    const userId = req.userId;
     let today = new Date();
 
     let query = {};
@@ -39,6 +65,7 @@ exports.getTasks = async (req, res) => {
     }
 
     query.status = status;
+    query.userId = userId;
 
     if (!filter) {
       return res.status(400).send("Invalid request!");
