@@ -218,3 +218,24 @@ exports.deleteTask = async (req, res) => {
     return res.status(400).send("Can not delete task!");
   }
 };
+
+exports.toggleCheck = async (req, res) => {
+  try {
+    const { taskId, checklistId, checked } = req.body;
+
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId, "checklists._id": checklistId },
+      { $set: { "checklists.$.checked": checked } },
+      { new: true }
+    );
+
+    if (updatedTask) {
+      res.status(200).send(updatedTask);
+    } else {
+      res.status(400).send("Task or checklist item not found or not updated.");
+    }
+  } catch (error) {
+    console.log("Error in taskController.changeTaskStatus", error);
+    return res.status(400).send("Can not delete task!");
+  }
+};

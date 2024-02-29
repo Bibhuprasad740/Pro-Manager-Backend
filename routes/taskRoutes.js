@@ -17,11 +17,14 @@ router.get("/getTasksBasedOnPriority", taskController.getTasksBasedOnPriority);
 // /api/tasks/dueTasks
 router.get("/tasks/dueTasks", taskController.getDueTasks);
 
-// /api/tasks/abc
-router.get("/tasks/:taskId", taskController.getTask);
+// /api/tasks/toggleCheck
+router.put("/tasks/toggleCheck", taskController.toggleCheck);
 
 // /api/tasks/changeTaskStatus => requires priority in query parameter
 router.patch("/tasks/changeTaskStatus", taskController.changeTaskStatus);
+
+// /api/tasks/abc
+router.get("/tasks/:taskId", taskController.getTask);
 
 // /api/deleteTask/abc
 router.delete("/deleteTask/:taskId", taskController.deleteTask);
