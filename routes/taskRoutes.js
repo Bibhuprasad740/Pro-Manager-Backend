@@ -7,21 +7,12 @@ const taskController = require("../controllers/taskController");
 router.post("/addTask", taskController.addTask);
 
 // /api/assignTaskToUser
-router.post("/assignTaskToUser", taskController.assignTaskToUser);
+router.patch("/assignTaskToUser", taskController.assignTaskToUser);
 
 // /api/tasks
 router.get("/tasks", taskController.getTasks);
 
-// // /api/getBacklog
-// router.get("/getBacklog", taskController.getBacklog);
-
-// // /api/getTodo
-// router.get("/getTodo", taskController.getTodo);
-
-// // /api/getOnGoing
-// router.get("/getOnGoing", taskController.getOnGoing);
-
-// // /api/getDone
-// router.get("/getDone", taskController.getDone);
+// /api/tasks/changeTaskStatus
+router.patch("/tasks/changeTaskStatus", taskController.changeTaskStatus);
 
 module.exports = router;

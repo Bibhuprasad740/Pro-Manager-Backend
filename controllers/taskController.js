@@ -116,3 +116,39 @@ exports.getTasks = async (req, res) => {
     return res.status(400).send("Something went wrong!");
   }
 };
+
+exports.changeTaskStatus = async (req, res) => {
+  try {
+    const { taskId, newStatus } = req.body;
+
+    if (!newStatus || !taskId) {
+      console.log(
+        "Error in taskController.changeTaskStatus. status or taskid is missing.."
+      );
+      return res.status(400).send("Invalid request!");
+    }
+
+    const validStatuses = ["backlog", "todo", "ongoing", "done"];
+    if (!validStatuses.includes(newStatus)) {
+      console.log(
+        "Error in taskController.changeTaskStatus. Invalid status received!"
+      );
+      return res.status(400).send("Invalid status received!");
+    }
+
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId }, // Assuming taskId is a valid ObjectId
+      { $set: { status: newStatus } },
+      { new: true } // Return the modified document
+    );
+
+    if (updatedTask) {
+      res.status(200).send("Updated Successfully!");
+    } else {
+      res.status(400).send("Task not found or status not updated!");
+    }
+  } catch (error) {
+    console.log("Error in taskController.changeTaskStatus", error);
+    return res.status(400).send("Something went wrong!");
+  }
+};
