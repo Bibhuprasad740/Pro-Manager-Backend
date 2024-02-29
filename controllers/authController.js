@@ -86,3 +86,58 @@ exports.signUp = async (req, res, next) => {
     return res.status(400).send("Error in creating user!");
   }
 };
+
+exports.updateUserCredentials = async (req, res) => {
+  try {
+    const { oldPassword, name, newPassword } = req.body;
+    const userId = req.userId;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      console.log("User not found!");
+      return res.status(400).send("User not found!");
+    }
+
+    if (oldPassword) {
+      const isPasswordMatch = await bcryptjs.compare(
+        oldPassword,
+        user.password
+      );
+
+      if (!isPasswordMatch) {
+        console.log("Old password is incorrect.");
+        return res.status(401).send("Old password is incorrect.");
+      }
+
+      if (!newPassword || newPassword.length === 0) {
+        console.log("New password is required!");
+        return res.status(400).send("New password is required!");
+      }
+    }
+
+    const updateFields = {};
+
+    if (name) {
+      updateFields.name = name;
+    }
+
+    if (newPassword) {
+      const hashedNewPassword = await bcryptjs.hash(newPassword, 10);
+      updateFields.password = hashedNewPassword;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateFields, {
+      new: true,
+    });
+
+    if (updatedUser) {
+      res.status(200).send(updatedUser);
+    } else {
+      res.status(400).send("User not found or not updated.");
+    }
+  } catch (error) {
+    console.log("Error in authController.userCredentials", error);
+    return res.status(400).send("Can not update credentials!");
+  }
+};
