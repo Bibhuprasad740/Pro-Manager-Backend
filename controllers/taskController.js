@@ -27,7 +27,7 @@ exports.addTask = async (req, res) => {
     return res.status(200).send(newTask);
   } catch (error) {
     console.log("Error in taskController.addTask", error);
-    return res.status(400).send("Something went wrong!");
+    return res.status(400).send("Can not add task!");
   }
 };
 
@@ -49,7 +49,7 @@ exports.assignTaskToUser = async (req, res) => {
       });
   } catch (error) {
     console.log("Error in taskController.assignTaskToUser", error);
-    return res.status(400).send("Something went wrong!");
+    return res.status(400).send("Can not assign task to user!");
   }
 };
 
@@ -113,7 +113,7 @@ exports.getTasks = async (req, res) => {
     res.status(200).send(tasks);
   } catch (error) {
     console.log("Error in taskController.getTasks", error);
-    return res.status(400).send("Something went wrong!");
+    return res.status(400).send("Can not get tasks!");
   }
 };
 
@@ -149,6 +149,22 @@ exports.changeTaskStatus = async (req, res) => {
     }
   } catch (error) {
     console.log("Error in taskController.changeTaskStatus", error);
-    return res.status(400).send("Something went wrong!");
+    return res.status(400).send("Can not change task status");
+  }
+};
+
+exports.deleteTask = async (req, res) => {
+  try {
+    const taskId = req.params.taskId;
+    const result = await Task.deleteOne({ _id: taskId });
+
+    if (result.deletedCount === 1) {
+      res.status(200).send("Task deleted successfully!");
+    } else {
+      res.status(400).send("Task not found!");
+    }
+  } catch (error) {
+    console.log("Error in taskController.changeTaskStatus", error);
+    return res.status(400).send("Can not delete task!");
   }
 };

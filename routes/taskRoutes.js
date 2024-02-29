@@ -15,4 +15,7 @@ router.get("/tasks", taskController.getTasks);
 // /api/tasks/changeTaskStatus
 router.patch("/tasks/changeTaskStatus", taskController.changeTaskStatus);
 
+// /api/deleteTask/abc
+router.delete("/deleteTask/:taskId", taskController.deleteTask);
+
 module.exports = router;
