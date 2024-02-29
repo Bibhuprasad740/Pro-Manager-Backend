@@ -108,12 +108,62 @@ exports.getTasks = async (req, res) => {
     }
 
     const tasks = await Task.find(query);
-    console.log(tasks);
 
     res.status(200).send(tasks);
   } catch (error) {
     console.log("Error in taskController.getTasks", error);
     return res.status(400).send("Can not get tasks!");
+  }
+};
+
+exports.getTasksBasedOnPriority = async (req, res) => {
+  try {
+    const { priority } = req.query;
+    const userId = req.userId;
+    if (!userId || !priority) {
+      return res.status(400).send("Invalid user id or priority is invalid!");
+    }
+    const query = {
+      userId,
+      priority,
+    };
+    const tasks = await Task.find(query);
+
+    res.status(200).send(tasks);
+  } catch (error) {
+    console.log("Error in taskController.getTasksBasedOnPriority", error);
+    return res.status(400).send("Can not get tasks!");
+  }
+};
+
+exports.getDueTasks = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const query = {
+      userId,
+      dueDate: { $ne: null, $lt: new Date() },
+    };
+    const dueTasks = await Task.find(query);
+
+    return res.status(200).send(dueTasks);
+  } catch (error) {
+    console.log("Error in taskController.getDueTasks", error);
+    return res.status(400).send("Can not get tasks!");
+  }
+};
+
+exports.getTask = async (req, res) => {
+  try {
+    const taskId = req.params.taskId;
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return res.status(400).send("Can not get the task!");
+    }
+    res.status(200).send(task);
+  } catch (error) {
+    console.log("Error in taskController.getTask", error);
+    return res.status(400).send("Can not get task!");
   }
 };
 
