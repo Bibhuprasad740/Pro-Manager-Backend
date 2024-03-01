@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const authController = require("../controllers/authController");
-const checkAuthorization = require("./authorization");
+const checkAuthorization = require("../middlewares/authorization");
 
 router.post("/signin", authController.signIn);
 

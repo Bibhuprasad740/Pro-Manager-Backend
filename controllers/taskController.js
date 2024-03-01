@@ -141,6 +141,7 @@ exports.getDueTasks = async (req, res) => {
     const userId = req.userId;
     const query = {
       userId,
+      status: { $ne: "done" },
       dueDate: { $ne: null, $lt: new Date() },
     };
     const dueTasks = await Task.find(query);
@@ -237,5 +238,36 @@ exports.toggleCheck = async (req, res) => {
   } catch (error) {
     console.log("Error in taskController.changeTaskStatus", error);
     return res.status(400).send("Can not delete task!");
+  }
+};
+
+exports.editTask = async (req, res) => {
+  try {
+    const updatedTask = req.body;
+    if (!updatedTask) {
+      console.log("Please send a task.");
+      return res.status(400).send("No task was found!");
+    }
+
+    const taskId = updatedTask._id;
+    const oldTask = await Task.findById(taskId);
+
+    if (!oldTask) {
+      console.log("Invalid task id!");
+      return res.status(400).send("Invalid task id");
+    }
+
+    oldTask.priority = updatedTask.priority;
+    oldTask.title = updatedTask.title;
+    oldTask.checklists = updatedTask.checklists;
+    oldTask.dueDate = updatedTask.dueDate;
+    oldTask.status = updatedTask.status;
+
+    const task = await oldTask.save();
+
+    return res.status(200).send(task);
+  } catch (error) {
+    console.log("Error in taskController.editTask", error);
+    return res.status(400).send("Can not edit task!");
   }
 };

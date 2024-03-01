@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const taskController = require("../controllers/taskController");
-const checkAuthorization = require("./authorization");
+const checkAuthorization = require("../middlewares/authorization");
 
 // /api/addTask
 router.post("/addTask", checkAuthorization, taskController.addTask);
@@ -32,6 +32,9 @@ router.put(
   checkAuthorization,
   taskController.toggleCheck
 );
+
+// /api/tasks/editTask
+router.put("/tasks/editTask", checkAuthorization, taskController.editTask);
 
 // /api/tasks/changeTaskStatus => requires priority in query parameter
 router.patch(
