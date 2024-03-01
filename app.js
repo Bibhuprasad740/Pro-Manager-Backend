@@ -10,7 +10,6 @@ const mongoConnect = require("./database/db");
 // routes
 const authRoutes = require("./routes/authRoutes");
 const taskRoutes = require("./routes/taskRoutes");
-const checkAuthorization = require("./routes/authorization");
 
 dotenv.config();
 
@@ -21,8 +20,6 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/auth", authRoutes);
-
-app.use(checkAuthorization);
 
 app.use("/api", taskRoutes);
 
