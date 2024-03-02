@@ -1,4 +1,3 @@
-const { ObjectId } = require("mongodb");
 const Task = require("../database/models/task");
 const User = require("../database/models/user");
 
@@ -188,13 +187,13 @@ exports.changeTaskStatus = async (req, res) => {
     }
 
     const updatedTask = await Task.findOneAndUpdate(
-      { _id: taskId }, // Assuming taskId is a valid ObjectId
+      { _id: taskId },
       { $set: { status: newStatus } },
-      { new: true } // Return the modified document
+      { new: true }
     );
 
     if (updatedTask) {
-      res.status(200).send("Updated Successfully!");
+      res.status(200).send(updatedTask);
     } else {
       res.status(400).send("Task not found or status not updated!");
     }
@@ -210,7 +209,7 @@ exports.deleteTask = async (req, res) => {
     const result = await Task.deleteOne({ _id: taskId });
 
     if (result.deletedCount === 1) {
-      res.status(200).send("Task deleted successfully!");
+      res.status(200).send(taskId);
     } else {
       res.status(400).send("Task not found!");
     }
