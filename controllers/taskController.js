@@ -74,7 +74,8 @@ exports.getTasks = async (req, res) => {
 
     switch (filter) {
       case "This Week": {
-        const sevenDaysAgo = new Date(today.getDate() - 7);
+        const sevenDaysAgo = new Date(today - 7 * 24 * 60 * 60 * 1000);
+        console.log(sevenDaysAgo);
 
         query.createdAt = {
           $gte: sevenDaysAgo,
