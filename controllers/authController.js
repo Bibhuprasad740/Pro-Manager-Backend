@@ -23,7 +23,7 @@ exports.signIn = async (req, res, next) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "48h",
+        expiresIn: "30d",
       }
     );
 
